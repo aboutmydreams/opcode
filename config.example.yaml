@@ -1,0 +1,27 @@
+server:
+  host: "127.0.0.1"
+  port: 3000
+  max_connections: 1000
+  request_timeout: 30
+
+database:
+  path: "~/.opcode/api-server.db"
+  max_connections: 10
+  connection_timeout: 30
+
+claude:
+  binary_path: null # Will auto-detect if not specified
+  projects_dir: "~/.claude/projects"
+  max_concurrent_sessions: 10
+  session_timeout: 3600
+
+auth:
+  enabled: false
+  jwt_secret: "your-secret-key-change-in-production"
+  token_expiry: 86400
+  api_keys: []
+
+logging:
+  level: "info"
+  file: null # Log to stdout if null
+  json_format: false
