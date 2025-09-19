@@ -72,6 +72,13 @@ Think of opcode as your command center for Claude Code - bridging the gap betwee
 - **Session History**: View and resume past coding sessions with full context
 - **Smart Search**: Find projects and sessions quickly with built-in search
 - **Session Insights**: See first messages, timestamps, and session metadata at a glance
+- **CLI Integration**: Launch opcode with specific project paths directly from command line
+
+### 🖥️ **Command Line Interface**
+- **Direct Project Access**: Open projects with `opcode ./project-path`
+- **Path Resolution**: Supports relative and absolute paths
+- **Quick Launch**: Seamlessly switch between CLI and GUI workflows
+- **Auto-Installation**: Simple script to enable global `opcode` command
 
 ### 🤖 **CC Agents**
 - **Custom AI Agents**: Create specialized agents with custom system prompts and behaviors
@@ -110,9 +117,34 @@ Think of opcode as your command center for Claude Code - bridging the gap betwee
 
 ### Getting Started
 
+**GUI Mode:**
 1. **Launch opcode**: Open the application after installation
 2. **Welcome Screen**: Choose between CC Agents or Projects
 3. **First Time Setup**: opcode will automatically detect your `~/.claude` directory
+
+**CLI Mode (NEW!):**
+```bash
+# Launch GUI mode
+opcode
+
+# Open specific project directly
+opcode ./my-project
+opcode /path/to/project
+
+# Examples
+opcode .                    # Open current directory
+opcode ~/coding/my-app      # Open with absolute path
+opcode ../other-project     # Open with relative path
+```
+
+After building opcode, run the installation script to enable CLI access:
+```bash
+# Install CLI (creates global opcode command)
+./scripts/install-cli.sh
+
+# Uninstall CLI
+./scripts/install-cli.sh uninstall
+```
 
 ### Managing Projects
 

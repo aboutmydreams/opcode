@@ -1,7 +1,7 @@
 [package]
 name = "opcode"
 version = "0.2.1"
-description = "GUI app and Toolkit for Claude Code"
+description = "API Server for Claude Code Agents"
 authors = ["mufeedvh", "123vviekr"]
 license = "AGPL-3.0"
 edition = "2021"
@@ -12,24 +12,25 @@ edition = "2021"
 name = "opcode"
 path = "src/main.rs"
 
-[lib]
-name = "opcode_lib"
-crate-type = ["lib", "cdylib", "staticlib"]
+# [lib]
+# name = "opcode_lib"
+# crate-type = ["lib", "cdylib", "staticlib"]
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = [ "macos-private-api", "protocol-asset", "tray-icon", "image-png"] }
-tauri-plugin-shell = "2"
-tauri-plugin-dialog = "2"
-tauri-plugin-fs = "2"
-tauri-plugin-process = "2"
-tauri-plugin-updater = "2"
-tauri-plugin-notification = "2"
-tauri-plugin-clipboard-manager = "2"
-tauri-plugin-global-shortcut = "2"
-tauri-plugin-http = "2"
+tauri = { version = "2.8", default-features = false }
+# GUI plugins commented out for API-only build
+# tauri-plugin-shell = "2.3"
+# tauri-plugin-dialog = "2.4"
+# tauri-plugin-fs = "2"
+# tauri-plugin-process = "2"
+# tauri-plugin-updater = "2"
+# tauri-plugin-notification = "2"
+# tauri-plugin-clipboard-manager = "2"
+# tauri-plugin-global-shortcut = "2.3"
+# tauri-plugin-http = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["full"] }
@@ -54,16 +55,29 @@ uuid = { version = "1.6", features = ["v4", "serde"] }
 walkdir = "2"
 serde_yaml = "0.9"
 
+# HTTP API dependencies
+axum = { version = "0.7", features = ["macros", "json", "ws"] }
+axum-extra = { version = "0.9", features = ["typed-header"] }
+tower = { version = "0.4", features = ["full"] }
+tower-http = { version = "0.5", features = ["cors", "fs", "trace"] }
+utoipa = { version = "4", features = ["axum_extras", "chrono", "uuid"] }
+utoipa-swagger-ui = { version = "6", features = ["axum"] }
+utoipa-rapidoc = { version = "2", features = ["axum"] }
+utoipa-redoc = { version = "2", features = ["axum"] }
+hyper = { version = "1.0", features = ["full"] }
+http = "1.0"
 
-[target.'cfg(target_os = "macos")'.dependencies]
-tauri = { version = "2", features = ["macos-private-api"] }
-window-vibrancy = "0.5"
-cocoa = "0.26"
-objc = "0.2"
 
-[features]
+# macOS specific dependencies commented out for API-only build
+# [target.'cfg(target_os = "macos")'.dependencies]
+# tauri = { version = "2.8", features = ["macos-private-api"] }
+# window-vibrancy = "0.5"
+# cocoa = "0.26"
+# objc = "0.2"
+
+# [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
-custom-protocol = ["tauri/custom-protocol"]
+# custom-protocol = ["tauri/custom-protocol"]
 
 [profile.release]
 strip = true

@@ -5,6 +5,9 @@ pub mod checkpoint;
 pub mod claude_binary;
 pub mod commands;
 pub mod process;
+pub mod api;
+
+pub use api::ApiServer;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
