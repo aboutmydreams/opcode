@@ -44,6 +44,21 @@ pub struct StartSessionRequest {
     pub additional_args: Option<Vec<String>>,
 }
 
+/// Request to create a new project
+#[derive(Debug, Deserialize, ToSchema)]
+pub struct CreateProjectRequest {
+    pub name: String,
+    pub path: String,
+    pub description: Option<String>,
+}
+
+/// Request to update an existing project
+#[derive(Debug, Deserialize, ToSchema)]
+pub struct UpdateProjectRequest {
+    pub name: Option<String>,
+    pub description: Option<String>,
+}
+
 /// Request to execute a command in Claude session
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct ExecuteCommandRequest {

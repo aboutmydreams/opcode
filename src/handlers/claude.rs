@@ -2,18 +2,19 @@ use axum::{
     extract::{Path, Query, State},
     http::StatusCode,
     response::Json,
-    routing::{get, post},
+    routing::{get, post, put, delete},
     Router,
 };
 use std::sync::Arc;
 use serde::Deserialize;
 
-use crate::models::claude::{Project, StartSessionRequest, SessionRecord};
+use crate::models::claude::{Project, StartSessionRequest, SessionRecord, CreateProjectRequest, UpdateProjectRequest};
 use crate::services::{ClaudeService, DatabaseService};
 
 pub fn claude_router() -> Router<Arc<DatabaseService>> {
     Router::new()
-        .route("/claude/projects", get(list_projects))
+        .route("/claude/projects", get(list_projects).post(create_project))
+        .route("/claude/projects/:id", put(update_project).delete(delete_project))
         .route("/claude/sessions", get(list_sessions).post(start_session))
         .route("/claude/sessions/:id", get(get_session))
 }
@@ -32,26 +33,43 @@ pub struct SessionsQuery {
     )
 )]
 pub async fn list_projects(
-    State(_db): State<Arc<DatabaseService>>,
+    State(db): State<Arc<DatabaseService>>,
 ) -> Result<Json<Vec<Project>>, StatusCode> {
-    // Return some mock projects for now
-    let projects = vec![
-        Project {
-            id: "base64_encoded_path_1".to_string(),
-            path: "/Users/apple/coding/project/ccAgent/opcode".to_string(),
-            sessions: vec!["session1".to_string(), "session2".to_string()],
-            created_at: 1640995200, // 2022-01-01
-            most_recent_session: Some(1640995300),
-        },
-        Project {
-            id: "base64_encoded_path_2".to_string(),
-            path: "/Users/apple/coding/another-project".to_string(),
-            sessions: vec!["session3".to_string()],
-            created_at: 1640995100,
-            most_recent_session: Some(1640995200),
+    match db.get_projects() {
+        Ok(projects) => Ok(Json(projects)),
+        Err(_) => Err(StatusCode::INTERNAL_SERVER_ERROR),
+    }
+}
+
+/// Create a new Claude project
+#[utoipa::path(
+    post,
+    path = "/api/claude/projects",
+    request_body = CreateProjectRequest,
+    responses(
+        (status = 201, description = "Project created successfully", body = Project),
+        (status = 400, description = "Invalid request or path validation failed"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn create_project(
+    State(db): State<Arc<DatabaseService>>,
+    Json(request): Json<CreateProjectRequest>,
+) -> Result<(StatusCode, Json<Project>), StatusCode> {
+    match db.create_project(request) {
+        Ok(project) => Ok((StatusCode::CREATED, Json(project))),
+        Err(e) => {
+            let error_msg = e.to_string();
+            if error_msg.contains("Parent directory does not exist") || 
+               error_msg.contains("Invalid path") ||
+               error_msg.contains("UNIQUE constraint failed") {
+                Err(StatusCode::BAD_REQUEST)
+            } else {
+                tracing::error!("Failed to create project: {}", e);
+                Err(StatusCode::INTERNAL_SERVER_ERROR)
+            }
         }
-    ];
-    Ok(Json(projects))
+    }
 }
 
 /// List sessions with optional project filter
@@ -130,4 +148,60 @@ pub async fn start_session(
         StatusCode::CREATED,
         Json(serde_json::json!({ "session_id": session_id })),
     ))
+}
+
+/// Update an existing project
+#[utoipa::path(
+    put,
+    path = "/api/claude/projects/{id}",
+    request_body = UpdateProjectRequest,
+    params(
+        ("id" = String, Path, description = "Project ID")
+    ),
+    responses(
+        (status = 200, description = "Project updated successfully", body = Project),
+        (status = 404, description = "Project not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn update_project(
+    State(db): State<Arc<DatabaseService>>,
+    Path(project_id): Path<String>,
+    Json(request): Json<UpdateProjectRequest>,
+) -> Result<Json<Project>, StatusCode> {
+    match db.update_project(&project_id, request) {
+        Ok(Some(project)) => Ok(Json(project)),
+        Ok(None) => Err(StatusCode::NOT_FOUND),
+        Err(e) => {
+            tracing::error!("Failed to update project: {}", e);
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        }
+    }
+}
+
+/// Delete a project and its directory
+#[utoipa::path(
+    delete,
+    path = "/api/claude/projects/{id}",
+    params(
+        ("id" = String, Path, description = "Project ID")
+    ),
+    responses(
+        (status = 204, description = "Project deleted successfully"),
+        (status = 404, description = "Project not found"),
+        (status = 500, description = "Internal server error")
+    )
+)]
+pub async fn delete_project(
+    State(db): State<Arc<DatabaseService>>,
+    Path(project_id): Path<String>,
+) -> Result<StatusCode, StatusCode> {
+    match db.delete_project(&project_id) {
+        Ok(true) => Ok(StatusCode::NO_CONTENT),
+        Ok(false) => Err(StatusCode::NOT_FOUND),
+        Err(e) => {
+            tracing::error!("Failed to delete project: {}", e);
+            Err(StatusCode::INTERNAL_SERVER_ERROR)
+        }
+    }
 }
