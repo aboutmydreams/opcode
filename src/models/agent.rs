@@ -16,6 +16,7 @@ pub struct Agent {
 }
 
 /// Agent execution run
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct AgentRun {
     pub id: Option<i64>,
@@ -31,6 +32,7 @@ pub struct AgentRun {
     pub output: Option<String>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub enum AgentRunStatus {
     Running,
@@ -51,6 +53,7 @@ pub struct CreateAgentRequest {
 }
 
 /// Request to run an agent
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct RunAgentRequest {
     pub agent_id: i64,
@@ -60,6 +63,7 @@ pub struct RunAgentRequest {
 }
 
 /// Request to update an existing agent
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct UpdateAgentRequest {
     pub name: String,
@@ -71,6 +75,7 @@ pub struct UpdateAgentRequest {
 }
 
 /// Agent run with metrics and real-time data
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, Clone, ToSchema)]
 pub struct AgentRunWithMetrics {
     pub id: Option<i64>,
@@ -92,6 +97,7 @@ pub struct AgentRunWithMetrics {
 }
 
 /// Agent export format for import/export
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct AgentExport {
     pub version: i32,
@@ -99,6 +105,7 @@ pub struct AgentExport {
     pub agent: AgentExportData,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct AgentExportData {
     pub name: String,
@@ -110,6 +117,7 @@ pub struct AgentExportData {
 }
 
 /// GitHub agent file information
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct GitHubAgentFile {
     pub name: String,
@@ -120,6 +128,7 @@ pub struct GitHubAgentFile {
 }
 
 /// Claude installation information
+#[allow(dead_code)]
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct ClaudeInstallation {
     pub path: String,

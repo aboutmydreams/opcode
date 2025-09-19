@@ -65,7 +65,7 @@ async fn main() -> Result<()> {
 
     // Initialize services
     let db_service = Arc::new(DatabaseService::new()?);
-    let claude_service = Arc::new(ClaudeService::new(db_service.clone())?);
+    let _claude_service = Arc::new(ClaudeService::new(db_service.clone())?);
     let mcp_service = Arc::new(MCPService::new()?);
     let ws_manager = Arc::new(WebSocketManager::new());
 

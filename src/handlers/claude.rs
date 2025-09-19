@@ -9,7 +9,7 @@ use std::sync::Arc;
 use serde::Deserialize;
 
 use crate::models::claude::{Project, StartSessionRequest, SessionRecord, CreateProjectRequest, UpdateProjectRequest};
-use crate::services::{ClaudeService, DatabaseService};
+use crate::services::DatabaseService;
 
 pub fn claude_router() -> Router<Arc<DatabaseService>> {
     Router::new()

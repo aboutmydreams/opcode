@@ -17,6 +17,7 @@ pub struct Project {
 }
 
 /// Represents a session with its metadata
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct Session {
     /// The session ID (UUID)
@@ -60,6 +61,7 @@ pub struct UpdateProjectRequest {
 }
 
 /// Request to execute a command in Claude session
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct ExecuteCommandRequest {
     pub session_id: String,

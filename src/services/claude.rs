@@ -10,7 +10,9 @@ use crate::models::claude::{Project, StartSessionRequest, SessionRecord};
 use crate::services::DatabaseService;
 
 pub struct ClaudeService {
+    #[allow(dead_code)]
     claude_binary_path: String,
+    #[allow(dead_code)]
     db_service: Arc<DatabaseService>,
 }
 

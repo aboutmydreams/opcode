@@ -1,22 +1,22 @@
 use crate::config::ClaudeConfig;
 use crate::error::{AppError, Result};
 use crate::models::mcp::{
-    AddMCPServerRequest, ConnectionTestResult, ImportResult, ImportServerResult, MCPProjectConfig,
-    MCPServer, MCPServerConfig, MCPServerResult, ServerStatus, UpdateMCPServerRequest,
+    AddMCPServerRequest, ConnectionTestResult, ImportResult, ImportServerResult,
+    MCPServer, MCPServerResult, UpdateMCPServerRequest,
 };
 use anyhow::Context;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
-use std::process::Command;
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::SystemTime;
 use tokio::process::Command as AsyncCommand;
-use tracing::{error, info, warn};
 
 #[derive(Debug, Clone)]
 pub struct MCPService {
+    #[allow(dead_code)]
     claude_config: ClaudeConfig,
+    #[allow(dead_code)]
     claude_binary_path: Option<PathBuf>,
 }
 
@@ -109,7 +109,7 @@ impl MCPService {
     pub async fn test_connection(&self, name: &str) -> Result<ConnectionTestResult> {
         let server = self.get_server(name).await?;
         
-        let start_time = SystemTime::now();
+        let _start_time = SystemTime::now();
         
         match server.transport.as_str() {
             "stdio" => self.test_stdio_connection(&server).await,
@@ -210,7 +210,7 @@ impl MCPService {
     async fn update_user_server(
         &self,
         name: &str,
-        request: UpdateMCPServerRequest,
+        _request: UpdateMCPServerRequest,
     ) -> Result<MCPServerResult> {
         // Implementation to update user server
         Ok(MCPServerResult {
@@ -223,7 +223,7 @@ impl MCPService {
     async fn update_project_server(
         &self,
         name: &str,
-        request: UpdateMCPServerRequest,
+        _request: UpdateMCPServerRequest,
     ) -> Result<MCPServerResult> {
         // Implementation to update project server
         Ok(MCPServerResult {
@@ -336,7 +336,7 @@ impl MCPService {
     async fn import_server_from_config(
         &self,
         name: &str,
-        config: &Value,
+        _config: &Value,
     ) -> Result<MCPServerResult> {
         // Parse the server configuration from Claude Desktop format
         // and add it as a user-level server

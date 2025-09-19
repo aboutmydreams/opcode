@@ -1,14 +1,14 @@
 use axum::{
     extract::{
         ws::{Message, WebSocket, WebSocketUpgrade},
-        State, Path, Query,
+        State, Path,
     },
     response::Response,
     routing::get,
     Router,
 };
 use futures::{sink::SinkExt, stream::StreamExt};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use std::{
     collections::HashMap,
     process::Stdio,
@@ -106,6 +106,7 @@ pub enum SessionType {
 }
 
 /// Query parameters for WebSocket connection
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct WebSocketQuery {
     pub session_id: String,

@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
 /// Storage usage statistics
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct StorageUsage {
     pub total_size_bytes: u64,
@@ -15,6 +16,7 @@ pub struct StorageUsage {
 }
 
 /// MCP Server configuration
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct McpServer {
     pub id: Option<i64>,
@@ -28,6 +30,7 @@ pub struct McpServer {
 }
 
 /// Request to create/update MCP server
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct McpServerRequest {
     pub name: String,
@@ -38,6 +41,7 @@ pub struct McpServerRequest {
 }
 
 /// Slash command configuration
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
 pub struct SlashCommand {
     pub id: Option<i64>,
@@ -50,6 +54,7 @@ pub struct SlashCommand {
 }
 
 /// Request to create/update slash command
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, ToSchema)]
 pub struct SlashCommandRequest {
     pub name: String,

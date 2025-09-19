@@ -108,6 +108,7 @@ pub struct ConnectionTestResult {
 }
 
 /// MCP configuration for project scope (.mcp.json)
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MCPProjectConfig {
     #[serde(rename = "mcpServers")]
@@ -115,6 +116,7 @@ pub struct MCPProjectConfig {
 }
 
 /// Individual server configuration in .mcp.json
+#[allow(dead_code)]
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct MCPServerConfig {
     pub command: String,
